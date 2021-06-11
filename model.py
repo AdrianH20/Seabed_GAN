@@ -2,6 +2,11 @@ from tensorflow.keras.layers import Input, Dense, LeakyReLU, Dropout, BatchNorma
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import SGD, Adam
 
+from tensorflow.keras.layers import Reshape
+from tensorflow.keras.layers import Conv2D
+from tensorflow.keras.layers import Conv2DTranspose
+from tensorflow.keras.layers import Flatten
+
 
 # Generator Model
 def build_generator(latent_dim, D):
@@ -14,6 +19,15 @@ def build_generator(latent_dim, D):
     x = BatchNormalization(momentum=0.7)(x)
     x = Dense(D, activation='tanh')(x)
 
+    # n_nodes = 256 * 4 * 4
+    # x = Dense(n_nodes, activation=LeakyReLU(alpha=0.2))(i)
+    # x = Reshape((4, 4, 256))(x)
+    #
+    # x = Conv2DTranspose(128, (4, 4), strides=(2, 2), padding='same', activation=LeakyReLU(alpha=0.2))(x)
+    # x = Conv2DTranspose(128, (4, 4), strides=(2, 2), padding='same', activation=LeakyReLU(alpha=0.2))(x)
+    # x = Conv2DTranspose(128, (4, 4), strides=(2, 2), padding='same', activation=LeakyReLU(alpha=0.2))(x)
+    #
+    # x = Conv2D(1, (1, 1), activation='tanh', padding='same')(x)
     model = Model(i, x)
     return model
 
@@ -24,11 +38,20 @@ def build_discriminator(img_size):
     x = Dense(512, activation=LeakyReLU(alpha=0.2))(i)
     x = Dense(256, activation=LeakyReLU(alpha=0.2))(x)
     x = Dense(1, activation='sigmoid')(x)
+
+    # i = Input(shape=(img_size, img_size, 1))
+    # x = Conv2D(64, (1, 1), padding='same', activation=LeakyReLU(alpha=0.2), input_shape=(img_size, img_size, 1))(i)
+    # x = Conv2D(128, (1, 1), strides=(2, 2), padding='same', activation=LeakyReLU(alpha=0.2))(x)
+    # x = Conv2D(128, (1, 1), strides=(2, 2), padding='same', activation=LeakyReLU(alpha=0.2))(x)
+    # x = Conv2D(256, (1, 1), strides=(2, 2), padding='same', activation=LeakyReLU(alpha=0.2))(x)
+    # x = Flatten()(x)
+    # x = Dropout(0.4)(x)
+    # x = Dense(1, activation='sigmoid')(x)
     model = Model(i, x)
     return model
 
 
-def compile(D, latent_dim):
+def compile(D, latent_dim, img_size):
     # Build and compile the discriminator
     discriminator = build_discriminator(D)
     discriminator.compile(

@@ -1,0 +1,5 @@
+Gaussian Surface FID: 5998.35, Samples: 1270, Sample dimension->(110, 110)
+Dense GAN Improvised Input FID: 1705.95, Samples: 1166, Sample dimension->(28, 28)
+Dense GAN Real Input FID: 201.85, Samples: 1114, Sample dimension->(28, 28)
+Convolutional GAN Simple Dataset FID: 50.26, Samples: 1270, Sample dimension->(32, 32)
+Convolutional GAN Structured Dataset FID: 36.08, Samples: 2342, Sample dimension->(32, 32)

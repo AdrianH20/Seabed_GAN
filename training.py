@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+import data_helper
 
 def sample_images(generator, epoch, latent_dim, sample_height, sample_width):
     rows, cols = 5, 5
@@ -14,8 +14,26 @@ def sample_images(generator, epoch, latent_dim, sample_height, sample_width):
             axs[i, j].imshow(images[idx].reshape(sample_height, sample_width))
             axs[i, j].axis('off')
             idx += 1
-    figure.savefig("gan_images/color_with_noise%d.png" % epoch)
+    figure.savefig("gan_images2/colored%d.png" % epoch)
     plt.close()
+
+
+def select_real_samples(dataset, batch_size, dim):
+    ix = np.random.randint(dataset.shape[0], size=batch_size)
+
+    X = dataset[ix]
+    X = X.reshape(batch_size, dim, dim)
+    y = np.ones((batch_size, 1))
+    return X, y
+
+
+def generate_fake_images(generator, latent_dim, sample_height, sample_width, samples_number):
+    path = 'C:\\Users\\adria\\Desktop\\dense_improvised_samples\\'
+    for i in range(samples_number):
+        noise = np.random.randn(1, latent_dim)
+        image = generator.predict(noise)
+        image = image.reshape(sample_height, sample_width)
+        data_helper.save_png(image, '{0}generated_image{1}.png'.format(path, str(i)), 0.37)
 
 
 def train(discriminator, generator, combined_model, epochs, x_train, batch_size, latent_dim,
@@ -33,6 +51,7 @@ def train(discriminator, generator, combined_model, epochs, x_train, batch_size,
         # Select a random batch of images
         idx = np.random.randint(0, x_train.shape[0], batch_size)
         real_imgs = x_train[idx]
+        #X_real, y_real = select_real_samples(x_train, batch_size, sample_height)
 
         # Generate fake images
         noise = np.random.randn(batch_size, latent_dim)
@@ -62,3 +81,4 @@ def train(discriminator, generator, combined_model, epochs, x_train, batch_size,
 
         if epoch % sample_period == 0:
             sample_images(generator=generator, epoch=epoch, latent_dim=latent_dim, sample_height=sample_height, sample_width=sample_width)
+    #generate_fake_images(generator=generator, latent_dim=latent_dim, sample_height=sample_height, sample_width=sample_width, samples_number=1270)

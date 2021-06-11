@@ -30,11 +30,11 @@ class EnvironmentGenerator:
         #self.add_peak(self, 30, 30, 10)
 
 
-        self.add_square(self, 30, 30, 7)
+        #self.add_square(self, 30, 30, 7)
         #self.add_peak(self, 15, 15, 20)
 
         self.Z *= self.scale
-        print(self.Z, type(self.Z))
+        #print(self.Z, type(self.Z))
         # Remember that Gazebo uses ENU (east-north-up) convention, so underwater
         # the Z coordinate will be negative
         #Z -= 3
@@ -46,6 +46,8 @@ class EnvironmentGenerator:
         self.output[:, 1] = self.Y.flatten()
         self.output[:, 2] = self.Z.flatten()
 
+
+        return self.output
         #self.create_3d_object(self, self.output, 'seabed1.stl')
 
         #self.show_surface(self, self.output)
@@ -136,16 +138,15 @@ class EnvironmentGenerator:
         for i in range(sample_number):
             self.random_array = np.random.randn(N[0], N[1])
             self.fourier_surface(self, self.random_array)
-            #self.add_square(self, 30, 30, 10)
             self.Z *= self.scale
-            self.save_png(self, self.Z,'figures/fig{}'.format(i))
-            if i% 200==0:
-                print(i)
+            self.save_png(self, self.Z, 'C:\\Users\\adria\\Desktop\\Licenta\\gaussian_samples\\gaussian{}'.format(i))
+            # if i% 200==0:
+            #     print(i)
             # Flatten our interpolated data for triangulation
-            # self.output = np.zeros(shape=(self.X.size, 3))
-            # self.output[:, 0] = self.X.flatten()
-            # self.output[:, 1] = self.Y.flatten()
-            # self.output[:, 2] = self.Z.flatten()
+            self.output = np.zeros(shape=(self.X.size, 3))
+            self.output[:, 0] = self.X.flatten()
+            self.output[:, 1] = self.Y.flatten()
+            self.output[:, 2] = self.Z.flatten()
 
             #self.create_3d_object(self, self.output, 'seabed_sample#'+str(i)+'.stl')
     def save_sample(self, zi, name):
